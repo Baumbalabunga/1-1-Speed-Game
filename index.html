@@ -1,450 +1,1524 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnPlay</title>
 
-    <title>1×1 Speed Challenge</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+body{
+margin:0;
+min-height:100vh;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+padding:18px;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            text-align: center;
-        }
+.app{
+max-width:480px;
+margin:auto;
+}
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-            padding: 25px 20px;
-        }
+.card{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(18px);
+border-radius:28px;
+padding:24px;
+box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
 
-        h1 {
-            font-size: 34px;
-            margin: 10px 0;
-        }
+.hidden{display:none!important}
 
-        .subtitle {
-            font-size: 17px;
-            opacity: 0.9;
-            margin-bottom: 25px;
-        }
+.logo{
+text-align:center;
+font-size:65px;
+}
 
-        .card {
-            background: white;
-            color: #222;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
+h1{
+text-align:center;
+margin:8px 0;
+font-size:32px;
+}
 
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            font-size: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
+.subtitle{
+text-align:center;
+opacity:.85;
+margin-bottom:25px;
+}
 
-        button {
-            border: none;
-            border-radius: 15px;
-            padding: 15px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            background: #2575fc;
-            color: white;
-            cursor: pointer;
-        }
+input,textarea,select{
+width:100%;
+border:0;
+outline:0;
+border-radius:16px;
+padding:15px;
+font-size:17px;
+margin-top:8px;
+font-family:inherit;
+}
 
-        button:active {
-            transform: scale(0.96);
-        }
+textarea{
+min-height:100px;
+resize:vertical;
+}
 
-        #game {
-            display: none;
-        }
+select{
+background:white;
+}
 
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
+button{
+width:100%;
+border:0;
+border-radius:17px;
+padding:15px;
+margin-top:11px;
+font-size:18px;
+font-weight:bold;
+background:white;
+color:#5746c3;
+}
 
-        .stat {
-            font-size: 18px;
-        }
+button:active{
+transform:scale(.97);
+}
 
-        .number {
-            font-size: 48px;
-            font-weight: bold;
-            margin: 25px 0;
-        }
+.secondary{
+background:rgba(255,255,255,.18);
+color:white;
+}
 
-        #answer {
-            font-size: 30px;
-        }
+.game-card{
+background:rgba(255,255,255,.14);
+border-radius:22px;
+padding:17px;
+margin:11px 0;
+cursor:pointer;
+}
 
-        #feedback {
-            height: 30px;
-            font-weight: bold;
-            margin: 10px;
-        }
+.game-card:active{
+transform:scale(.98);
+}
 
-        #result {
-            display: none;
-        }
+.icon{
+font-size:40px;
+float:left;
+margin-right:14px;
+}
 
-        .score {
-            font-size: 55px;
-            font-weight: bold;
-            color: #2575fc;
-        }
+.game-title{
+font-size:20px;
+font-weight:bold;
+}
 
-        .leaderboard {
-            margin-top: 25px;
-            text-align: left;
-        }
+.game-description{
+font-size:14px;
+opacity:.8;
+margin-top:4px;
+}
 
-        .leaderboard h2 {
-            text-align: center;
-        }
+.clear{clear:both}
 
-        .player {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px;
-            margin: 6px 0;
-            background: #f1f3f7;
-            border-radius: 10px;
-        }
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
 
-        .small {
-            margin-top: 15px;
-            font-size: 13px;
-            opacity: 0.7;
-        }
-    </style>
+.back{
+width:auto;
+padding:9px 14px;
+margin:0;
+font-size:14px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.stat{
+background:rgba(255,255,255,.13);
+border-radius:15px;
+padding:10px 4px;
+text-align:center;
+}
+
+.stat-title{
+font-size:11px;
+opacity:.7;
+}
+
+.stat-value{
+font-size:22px;
+font-weight:bold;
+}
+
+.question{
+font-size:29px;
+font-weight:800;
+text-align:center;
+margin:30px 0;
+}
+
+.option{
+text-align:left;
+}
+
+.message{
+text-align:center;
+min-height:30px;
+margin-top:12px;
+font-weight:bold;
+}
+
+.result{
+text-align:center;
+font-size:23px;
+margin:20px 0;
+}
+
+.record{
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.section-title{
+font-size:22px;
+font-weight:bold;
+margin:10px 0;
+}
+
+.small{
+font-size:13px;
+opacity:.75;
+}
+
+#confetti{
+position:fixed;
+inset:0;
+pointer-events:none;
+overflow:hidden;
+z-index:100;
+}
+
+.confetti{
+position:absolute;
+width:9px;
+height:14px;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+from{
+transform:translateY(-20px) rotate(0deg);
+opacity:1;
+}
+to{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<div id="confetti"></div>
 
-    <h1>🧠 1×1 Speed Challenge</h1>
+<div class="app">
 
-    <div class="subtitle">
-        Wie viele Aufgaben schaffst du in 60 Sekunden?
-    </div>
+<!-- LOGIN -->
 
-    <!-- START -->
-    <div class="card" id="start">
+<div id="loginScreen">
 
-        <h2>Bereit? 🚀</h2>
+<div class="card">
 
-        <p>Gib deinen Namen ein:</p>
+<div class="logo">🧠</div>
 
-        <input
-            id="name"
-            type="text"
-            placeholder="Dein Name"
-            maxlength="15"
-        >
+<h1>LearnPlay</h1>
 
-        <button onclick="startGame()">
-            START! 🔥
-        </button>
+<div class="subtitle">
+Lernen. Spielen. Besser werden.
+</div>
 
-    </div>
+<p style="text-align:center">Wie heißt du?</p>
 
+<input id="nameInput"
+maxlength="20"
+placeholder="Dein Name">
 
-    <!-- SPIEL -->
-    <div class="card" id="game">
+<button onclick="login()">
+🚀 Los geht's
+</button>
 
-        <div class="stats">
-
-            <div class="stat">
-                ⏱️ <span id="time">60</span>
-            </div>
-
-            <div class="stat">
-                🏆 <span id="score">0</span>
-            </div>
-
-        </div>
-
-        <div class="number" id="question">
-            7 × 8
-        </div>
-
-        <input
-            id="answer"
-            type="number"
-            inputmode="numeric"
-            placeholder="?"
-        >
-
-        <button onclick="checkAnswer()">
-            Antwort ✅
-        </button>
-
-        <div id="feedback"></div>
-
-    </div>
+</div>
+</div>
 
 
-    <!-- ERGEBNIS -->
-    <div class="card" id="result">
+<!-- HOME -->
 
-        <h2>⏰ Zeit abgelaufen!</h2>
+<div id="homeScreen" class="hidden">
 
-        <p>Du hast geschafft:</p>
+<div class="card">
 
-        <div class="score" id="finalScore">
-            0
-        </div>
+<div class="logo" style="font-size:48px">👋</div>
 
-        <p>richtige Aufgaben! 🎉</p>
+<h1>Hallo <span id="playerName"></span>!</h1>
 
-        <button onclick="playAgain()">
-            Nochmal spielen 🔄
-        </button>
+<div class="subtitle">
+Wähle ein Lernspiel
+</div>
 
-        <div class="leaderboard">
 
-            <h2>🏆 Rangliste</h2>
+<div class="game-card" onclick="openGame('multiplication')">
+<div class="icon">⚡</div>
+<div class="game-title">1×1 Speed Game</div>
+<div class="game-description">60 Sekunden Rechnen</div>
+<div class="clear"></div>
+</div>
 
-            <div id="leaderboardList"></div>
 
-        </div>
+<div class="game-card" onclick="openGame('plusminus')">
+<div class="icon">➕</div>
+<div class="game-title">Plus & Minus</div>
+<div class="game-description">Schnell rechnen</div>
+<div class="clear"></div>
+</div>
 
-    </div>
 
-    <div class="small">
-        1×1 Speed Challenge
-    </div>
+<div class="game-card" onclick="openGame('challenge')">
+<div class="icon">🎯</div>
+<div class="game-title">10er-Challenge</div>
+<div class="game-description">10 Matheaufgaben</div>
+<div class="clear"></div>
+</div>
+
+
+<div class="game-card" onclick="openGame('countries')">
+<div class="icon">🌍</div>
+<div class="game-title">Länder-Quiz</div>
+<div class="game-description">Länder, Hauptstädte und Geografie</div>
+<div class="clear"></div>
+</div>
+
+
+<div class="game-card" onclick="openGame('english')">
+<div class="icon">🇬🇧</div>
+<div class="game-title">Englisch-Quiz</div>
+<div class="game-description">Englische Wörter lernen</div>
+<div class="clear"></div>
+</div>
+
+
+<div class="game-card" onclick="openGame('general')">
+<div class="icon">🧠</div>
+<div class="game-title">Allgemeinwissen</div>
+<div class="game-description">Wissen aus vielen Bereichen</div>
+<div class="clear"></div>
+</div>
+
+
+<div class="game-card" onclick="openGame('science')">
+<div class="icon">🔬</div>
+<div class="game-title">Wissenschaft</div>
+<div class="game-description">Natur, Körper, Erde und Weltall</div>
+<div class="clear"></div>
+</div>
+
+
+<div class="game-card" onclick="showAddQuestion()">
+<div class="icon">➕</div>
+<div class="game-title">Eigene Frage hinzufügen</div>
+<div class="game-description">
+Erstelle deine eigenen Lernfragen
+</div>
+<div class="clear"></div>
+</div>
+
+
+<button class="secondary" onclick="logout()">
+🚪 Abmelden
+</button>
+
+</div>
+</div>
+
+
+<!-- ADD QUESTION -->
+
+<div id="addScreen" class="hidden">
+
+<div class="card">
+
+<div class="topbar">
+
+<button class="back" onclick="showHome()">
+← Zurück
+</button>
+
+<strong>Neue Frage</strong>
+
+</div>
+
+<h2>➕ Eigene Frage</h2>
+
+<p class="small">
+Deine Frage wird auf diesem Gerät gespeichert.
+</p>
+
+<select id="customCategory">
+
+<option value="countries">🌍 Länder-Quiz</option>
+<option value="english">🇬🇧 Englisch</option>
+<option value="general">🧠 Allgemeinwissen</option>
+<option value="science">🔬 Wissenschaft</option>
+
+</select>
+
+<input id="customQuestion"
+placeholder="Deine Frage">
+
+<input id="customA"
+placeholder="Antwort A">
+
+<input id="customB"
+placeholder="Antwort B">
+
+<input id="customC"
+placeholder="Antwort C">
+
+<input id="customD"
+placeholder="Antwort D">
+
+<select id="customCorrect">
+
+<option value="0">A ist richtig</option>
+<option value="1">B ist richtig</option>
+<option value="2">C ist richtig</option>
+<option value="3">D ist richtig</option>
+
+</select>
+
+<button onclick="saveCustomQuestion()">
+💾 Frage speichern
+</button>
+
+<div id="customMessage"
+class="message">
+</div>
+
+</div>
+</div>
+
+
+<!-- GAME -->
+
+<div id="gameScreen" class="hidden">
+
+<div class="card">
+
+<div class="topbar">
+
+<button class="back" onclick="showHome()">
+← Zurück
+</button>
+
+<strong id="gameName"></strong>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+<div class="stat-title">Punkte</div>
+<div class="stat-value" id="score">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-title">Combo 🔥</div>
+<div class="stat-value" id="combo">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-title">Highscore</div>
+<div class="stat-value" id="highscore">0</div>
+</div>
+
+</div>
+
+
+<div id="timerArea" class="hidden"
+style="text-align:center;margin:18px 0;font-weight:bold">
+⏱️ <span id="time">60</span>
+</div>
+
+
+<div id="question" class="question">
+Frage
+</div>
+
+
+<div id="answerArea">
+
+<input id="mathAnswer"
+type="number"
+inputmode="numeric"
+placeholder="Antwort">
+
+<button onclick="submitMath()">
+✓ Antwort
+</button>
+
+</div>
+
+
+<div id="optionsArea"></div>
+
+
+<div id="message" class="message"></div>
+
+
+<div id="resultArea" class="hidden">
+
+<div id="resultText" class="result"></div>
+
+<div id="record" class="record"></div>
+
+<button onclick="restartGame()">
+🔄 Nochmal
+</button>
+
+<button class="secondary" onclick="showHome()">
+🏠 Startseite
+</button>
+
+</div>
+
+</div>
+</div>
 
 </div>
 
 
 <script>
 
+/* =========================
+GRUNDDATEN
+========================= */
+
+let player =
+localStorage.getItem("learnPlayer");
+
+let currentGame = "";
+
 let score = 0;
+let combo = 0;
+let correct = 0;
+let wrong = 0;
+
+let quizQuestions = [];
+let questionIndex = 0;
+
+let timer = null;
 let timeLeft = 60;
-let timer;
-let num1;
-let num2;
-let correctAnswer;
-let playerName = "";
+
+let mathAnswer = 0;
 
 
-/* Neue Aufgabe */
-function newQuestion() {
+/* =========================
+FRAGEN
+========================= */
 
-    num1 = Math.floor(Math.random() * 10) + 1;
-    num2 = Math.floor(Math.random() * 10) + 1;
+/*
+Jede Frage:
+[
+ Frage,
+ [A,B,C,D],
+ richtige Antwort
+]
+*/
 
-    correctAnswer = num1 * num2;
+const countries = [
 
-    document.getElementById("question").textContent =
-        num1 + " × " + num2;
+["Was ist die Hauptstadt von Frankreich?",["Paris","Madrid","Rom","Berlin"],"Paris"],
+["Was ist die Hauptstadt von Deutschland?",["Berlin","Wien","Bern","Prag"],"Berlin"],
+["Was ist die Hauptstadt von Italien?",["Rom","Paris","Madrid","Lissabon"],"Rom"],
+["Was ist die Hauptstadt von Spanien?",["Madrid","Barcelona","Rom","Sevilla"],"Madrid"],
+["Was ist die Hauptstadt von Portugal?",["Lissabon","Porto","Madrid","Athen"],"Lissabon"],
+["Was ist die Hauptstadt von Österreich?",["Wien","Graz","Salzburg","Linz"],"Wien"],
+["Was ist die Hauptstadt der Schweiz?",["Bern","Zürich","Genf","Basel"],"Bern"],
+["Was ist die Hauptstadt von Polen?",["Warschau","Krakau","Danzig","Posen"],"Warschau"],
+["Was ist die Hauptstadt von Tschechien?",["Prag","Brünn","Wien","Bratislava"],"Prag"],
+["Was ist die Hauptstadt von Ungarn?",["Budapest","Bukarest","Sofia","Zagreb"],"Budapest"],
+["Was ist die Hauptstadt von Griechenland?",["Athen","Thessaloniki","Rom","Nikosia"],"Athen"],
+["Was ist die Hauptstadt von Norwegen?",["Oslo","Bergen","Stockholm","Helsinki"],"Oslo"],
+["Was ist die Hauptstadt von Schweden?",["Stockholm","Oslo","Göteborg","Helsinki"],"Stockholm"],
+["Was ist die Hauptstadt von Finnland?",["Helsinki","Turku","Oslo","Tallinn"],"Helsinki"],
+["Was ist die Hauptstadt von Dänemark?",["Kopenhagen","Aarhus","Oslo","Malmö"],"Kopenhagen"],
+["Was ist die Hauptstadt von Island?",["Reykjavik","Oslo","Nuuk","Helsinki"],"Reykjavik"],
+["Was ist die Hauptstadt von Irland?",["Dublin","Cork","Belfast","London"],"Dublin"],
+["Was ist die Hauptstadt des Vereinigten Königreichs?",["London","Manchester","Liverpool","Edinburgh"],"London"],
+["Was ist die Hauptstadt von Kanada?",["Ottawa","Toronto","Vancouver","Montreal"],"Ottawa"],
+["Was ist die Hauptstadt der USA?",["Washington, D.C.","New York","Boston","Chicago"],"Washington, D.C."],
+["Was ist die Hauptstadt von Mexiko?",["Mexiko-Stadt","Cancún","Monterrey","Guadalajara"],"Mexiko-Stadt"],
+["Was ist die Hauptstadt von Brasilien?",["Brasília","Rio de Janeiro","São Paulo","Salvador"],"Brasília"],
+["Was ist die Hauptstadt von Argentinien?",["Buenos Aires","Córdoba","Rosario","Mendoza"],"Buenos Aires"],
+["Was ist die Hauptstadt von Chile?",["Santiago","Valparaíso","Lima","Quito"],"Santiago"],
+["Was ist die Hauptstadt von Peru?",["Lima","Cusco","Quito","La Paz"],"Lima"],
+["Was ist die Hauptstadt von Kolumbien?",["Bogotá","Medellín","Cali","Quito"],"Bogotá"],
+["Was ist die Hauptstadt von Australien?",["Canberra","Sydney","Melbourne","Perth"],"Canberra"],
+["Was ist die Hauptstadt von Neuseeland?",["Wellington","Auckland","Christchurch","Hamilton"],"Wellington"],
+["Was ist die Hauptstadt von Japan?",["Tokio","Kyoto","Osaka","Hiroshima"],"Tokio"],
+["Was ist die Hauptstadt von China?",["Peking","Shanghai","Hongkong","Nanjing"],"Peking"],
+["Was ist die Hauptstadt von Südkorea?",["Seoul","Busan","Incheon","Daegu"],"Seoul"],
+["Was ist die Hauptstadt von Indien?",["Neu-Delhi","Mumbai","Kolkata","Chennai"],"Neu-Delhi"],
+["Was ist die Hauptstadt von Thailand?",["Bangkok","Phuket","Chiang Mai","Pattaya"],"Bangkok"],
+["Was ist die Hauptstadt von Vietnam?",["Hanoi","Ho-Chi-Minh-Stadt","Da Nang","Hue"],"Hanoi"],
+["Was ist die Hauptstadt von Indonesien?",["Jakarta","Bali","Surabaya","Bandung"],"Jakarta"],
+["Was ist die Hauptstadt der Philippinen?",["Manila","Cebu","Davao","Quezon City"],"Manila"],
+["Was ist die Hauptstadt von Ägypten?",["Kairo","Alexandria","Gizeh","Luxor"],"Kairo"],
+["Was ist die Hauptstadt von Marokko?",["Rabat","Casablanca","Marrakesch","Fès"],"Rabat"],
+["Was ist die Hauptstadt von Kenia?",["Nairobi","Mombasa","Kisumu","Nakuru"],"Nairobi"],
+["Was ist die Hauptstadt von Nigeria?",["Abuja","Lagos","Kano","Ibadan"],"Abuja"],
+["Was ist die Hauptstadt von Südafrika?",["Pretoria","Kapstadt","Durban","Johannesburg"],"Pretoria"],
+["Was ist die Hauptstadt von Türkei?",["Ankara","Istanbul","Izmir","Antalya"],"Ankara"],
+["Auf welchem Kontinent liegt Deutschland?",["Europa","Asien","Afrika","Amerika"],"Europa"],
+["Auf welchem Kontinent liegt Brasilien?",["Südamerika","Afrika","Europa","Asien"],"Südamerika"],
+["Auf welchem Kontinent liegt Japan?",["Asien","Europa","Afrika","Australien"],"Asien"],
+["Welcher Kontinent ist der größte?",["Asien","Afrika","Europa","Australien"],"Asien"],
+["Welcher Kontinent ist der kleinste?",["Australien","Europa","Afrika","Asien"],"Australien"],
+["Welches Land ist flächenmäßig sehr groß?",["Russland","Monaco","Malta","Luxemburg"],"Russland"],
+["Welches Land wird oft als Stiefel bezeichnet?",["Italien","Spanien","Frankreich","Griechenland"],"Italien"]
 
-    document.getElementById("answer").value = "";
+];
 
-    document.getElementById("answer").focus();
+
+/* ENGLISCH */
+
+const english = [
+
+["Was bedeutet 'house'?",["Haus","Hund","Hand","Hose"],"Haus"],
+["Was bedeutet 'water'?",["Wasser","Feuer","Luft","Erde"],"Wasser"],
+["Was bedeutet 'book'?",["Buch","Tisch","Stuhl","Schule"],"Buch"],
+["Was bedeutet 'school'?",["Schule","Straße","Laden","Kirche"],"Schule"],
+["Was bedeutet 'friend'?",["Freund","Lehrer","Bruder","Nachbar"],"Freund"],
+["Was bedeutet 'cat'?",["Katze","Hund","Maus","Pferd"],"Katze"],
+["Was bedeutet 'dog'?",["Hund","Katze","Vogel","Fisch"],"Hund"],
+["Was bedeutet 'apple'?",["Apfel","Birne","Orange","Banane"],"Apfel"],
+["Was bedeutet 'watermelon'?",["Wassermelone","Erdbeere","Orange","Kirsche"],"Wassermelone"],
+["Was bedeutet 'sun'?",["Sonne","Mond","Stern","Wolke"],"Sonne"],
+["Was bedeutet 'moon'?",["Mond","Sonne","Stern","Planet"],"Mond"],
+["Was bedeutet 'star'?",["Stern","Mond","Wolke","Regen"],"Stern"],
+["Was bedeutet 'tree'?",["Baum","Blume","Gras","Wald"],"Baum"],
+["Was bedeutet 'flower'?",["Blume","Baum","Wolke","Stein"],"Blume"],
+["Was bedeutet 'schoolbag'?",["Schultasche","Schreibtisch","Schulhof","Schulbuch"],"Schultasche"],
+["Was bedeutet 'teacher'?",["Lehrer","Schüler","Arzt","Polizist"],"Lehrer"],
+["Was bedeutet 'student'?",["Schüler","Lehrer","Arzt","Fahrer"],"Schüler"],
+["Was bedeutet 'doctor'?",["Arzt","Lehrer","Bäcker","Richter"],"Arzt"],
+["Was bedeutet 'hospital'?",["Krankenhaus","Schule","Bahnhof","Hotel"],"Krankenhaus"],
+["Was bedeutet 'car'?",["Auto","Fahrrad","Zug","Bus"],"Auto"],
+["Was bedeutet 'train'?",["Zug","Bus","Auto","Flugzeug"],"Zug"],
+["Was bedeutet 'airplane'?",["Flugzeug","Schiff","Zug","Auto"],"Flugzeug"],
+["Was bedeutet 'ship'?",["Schiff","Boot","Flugzeug","Zug"],"Schiff"],
+["Was bedeutet 'red'?",["Rot","Blau","Grün","Gelb"],"Rot"],
+["Was bedeutet 'blue'?",["Blau","Rot","Grün","Gelb"],"Blau"],
+["Was bedeutet 'green'?",["Grün","Blau","Rot","Gelb"],"Grün"],
+["Was bedeutet 'yellow'?",["Gelb","Rot","Blau","Lila"],"Gelb"],
+["Was bedeutet 'black'?",["Schwarz","Weiß","Grau","Braun"],"Schwarz"],
+["Was bedeutet 'white'?",["Weiß","Schwarz","Grau","Blau"],"Weiß"],
+["Was bedeutet 'big'?",["groß","klein","schnell","langsam"],"groß"],
+["Was bedeutet 'small'?",["klein","groß","alt","jung"],"klein"],
+["Was bedeutet 'fast'?",["schnell","langsam","laut","leise"],"schnell"],
+["Was bedeutet 'slow'?",["langsam","schnell","hoch","niedrig"],"langsam"],
+["Was bedeutet 'happy'?",["glücklich","traurig","wütend","müde"],"glücklich"],
+["Was bedeutet 'sad'?",["traurig","glücklich","hungrig","schnell"],"traurig"],
+["Was bedeutet 'hot'?",["heiß","kalt","warm","nass"],"heiß"],
+["Was bedeutet 'cold'?",["kalt","heiß","trocken","laut"],"kalt"],
+["Was bedeutet 'morning'?",["Morgen","Abend","Nacht","Mittag"],"Morgen"],
+["Was bedeutet 'night'?",["Nacht","Morgen","Abend","Mittag"],"Nacht"],
+["Was bedeutet 'today'?",["heute","gestern","morgen","später"],"heute"],
+["Was bedeutet 'tomorrow'?",["morgen","heute","gestern","jetzt"],"morgen"],
+["Was bedeutet 'yesterday'?",["gestern","heute","morgen","später"],"gestern"],
+["Was bedeutet 'mother'?",["Mutter","Vater","Schwester","Tante"],"Mutter"],
+["Was bedeutet 'father'?",["Vater","Mutter","Bruder","Onkel"],"Vater"],
+["Was bedeutet 'brother'?",["Bruder","Schwester","Vater","Sohn"],"Bruder"],
+["Was bedeutet 'sister'?",["Schwester","Bruder","Mutter","Tochter"],"Schwester"],
+["Was bedeutet 'house'?",["Haus","Wohnung","Garten","Zimmer"],"Haus"],
+["Was bedeutet 'door'?",["Tür","Fenster","Wand","Dach"],"Tür"],
+["Was bedeutet 'window'?",["Fenster","Tür","Dach","Boden"],"Fenster"]
+
+];
+
+
+/* ALLGEMEINWISSEN */
+
+const general = [
+
+["Wie viele Tage hat eine Woche?",["7","5","10","12"],"7"],
+["Wie viele Monate hat ein Jahr?",["12","10","11","14"],"12"],
+["Wie viele Stunden hat ein Tag?",["24","12","48","36"],"24"],
+["Wie viele Minuten hat eine Stunde?",["60","30","90","100"],"60"],
+["Wie viele Sekunden hat eine Minute?",["60","30","100","120"],"60"],
+["Wie viele Seiten hat ein Dreieck?",["3","4","5","6"],"3"],
+["Wie viele Seiten hat ein Quadrat?",["4","3","5","6"],"4"],
+["Wie viele Beine hat eine Spinne?",["8","6","4","10"],"8"],
+["Wie viele Beine hat ein Insekt?",["6","8","4","10"],"6"],
+["Welche Farbe entsteht aus Blau und Gelb?",["Grün","Orange","Lila","Rot"],"Grün"],
+["Welches Tier wird oft König der Tiere genannt?",["Löwe","Tiger","Elefant","Wolf"],"Löwe"],
+["Welches Tier ist bekannt für seinen langen Hals?",["Giraffe","Elefant","Zebra","Panda"],"Giraffe"],
+["Welches Tier kann fliegen?",["Adler","Elefant","Pferd","Hund"],"Adler"],
+["Welches Tier lebt typischerweise im Wasser?",["Fisch","Katze","Pferd","Huhn"],"Fisch"],
+["Welcher Planet ist unser Heimatplanet?",["Erde","Mars","Venus","Jupiter"],"Erde"],
+["Wie heißt unser Stern?",["Sonne","Mond","Mars","Venus"],"Sonne"],
+["Wie viele Kontinente gibt es üblicherweise?",["7","5","6","8"],"7"],
+["Wie viele Ozeane gibt es üblicherweise?",["5","3","7","10"],"5"],
+["Was ist H2O?",["Wasser","Sauerstoff","Salz","Zucker"],"Wasser"],
+["Welche Farbe hat Chlorophyll typischerweise?",["Grün","Rot","Blau","Schwarz"],"Grün"],
+["Was ist die Hauptstadt von Deutschland?",["Berlin","München","Hamburg","Köln"],"Berlin"],
+["Welche Sprache wird in Spanien hauptsächlich gesprochen?",["Spanisch","Italienisch","Französisch","Portugiesisch"],"Spanisch"],
+["Welche Sprache wird in Frankreich hauptsächlich gesprochen?",["Französisch","Spanisch","Englisch","Italienisch"],"Französisch"],
+["Wie nennt man gefrorenes Wasser?",["Eis","Dampf","Nebel","Tau"],"Eis"],
+["Welche Jahreszeit folgt auf den Frühling?",["Sommer","Herbst","Winter","Frühjahr"],"Sommer"],
+["Welche Jahreszeit folgt auf den Sommer?",["Herbst","Winter","Frühling","Sommer"],"Herbst"],
+["Welche Jahreszeit ist normalerweise die kälteste?",["Winter","Sommer","Frühling","Herbst"],"Winter"],
+["Welche Form hat ein Ball ungefähr?",["Kugel","Würfel","Pyramide","Zylinder"],"Kugel"],
+["Was benutzt man zum Schreiben?",["Stift","Löffel","Teller","Schuh"],"Stift"],
+["Was benutzt man zum Schneiden von Papier?",["Schere","Lineal","Tasse","Buch"],"Schere"],
+["Was misst ein Thermometer?",["Temperatur","Zeit","Gewicht","Länge"],"Temperatur"],
+["Was misst eine Waage?",["Gewicht","Temperatur","Zeit","Geschwindigkeit"],"Gewicht"],
+["Was zeigt eine Uhr?",["Zeit","Gewicht","Temperatur","Entfernung"],"Zeit"],
+["Welche Farbe hat eine Banane meist?",["Gelb","Blau","Lila","Schwarz"],"Gelb"],
+["Welche Farbe hat Gras meist?",["Grün","Rot","Blau","Gelb"],"Grün"],
+["Welches Tier gibt Milch?",["Kuh","Huhn","Fisch","Adler"],"Kuh"],
+["Welches Tier legt Eier?",["Huhn","Hund","Katze","Pferd"],"Huhn"],
+["Was brauchen Menschen zum Atmen?",["Sauerstoff","Gold","Sand","Salz"],"Sauerstoff"],
+["Was braucht eine Pflanze für die Fotosynthese?",["Licht","Plastik","Eisen","Glas"],"Licht"],
+["Was ist größer?",["Elefant","Maus","Ameise","Hamster"],"Elefant"],
+["Was ist kleiner?",["Ameise","Elefant","Giraffe","Pferd"],"Ameise"],
+["Welches Verkehrsmittel fährt auf Schienen?",["Zug","Auto","Flugzeug","Fahrrad"],"Zug"],
+["Welches Verkehrsmittel fliegt?",["Flugzeug","Bus","Zug","Fahrrad"],"Flugzeug"],
+["Welches Verkehrsmittel fährt auf dem Wasser?",["Schiff","Auto","Zug","Bus"],"Schiff"],
+["Was ist eine Woche?",["7 Tage","10 Tage","5 Tage","12 Tage"],"7 Tage"],
+["Was ist ein Jahrzehnt?",["10 Jahre","5 Jahre","20 Jahre","100 Jahre"],"10 Jahre"],
+["Was ist ein Jahrhundert?",["100 Jahre","10 Jahre","50 Jahre","1000 Jahre"],"100 Jahre"],
+["Welche Zahl kommt nach 99?",["100","101","90","110"],"100"],
+["Welche Zahl kommt vor 50?",["49","48","51","40"],"49"]
+
+];
+
+
+/* WISSENSCHAFT */
+
+const science = [
+
+["Welcher Planet ist der Sonne am nächsten?",["Merkur","Venus","Erde","Mars"],"Merkur"],
+["Welcher Planet wird Roter Planet genannt?",["Mars","Venus","Jupiter","Saturn"],"Mars"],
+["Wie viele Planeten hat unser Sonnensystem?",["8","7","9","10"],"8"],
+["Welcher Planet ist der größte?",["Jupiter","Saturn","Erde","Mars"],"Jupiter"],
+["Welcher Planet ist für seine Ringe bekannt?",["Saturn","Mars","Venus","Merkur"],"Saturn"],
+["Wie heißt der natürliche Satellit der Erde?",["Mond","Mars","Sonne","Venus"],"Mond"],
+["Was ist die Sonne?",["Ein Stern","Ein Planet","Ein Mond","Ein Komet"],"Ein Stern"],
+["Was ist die Erde?",["Ein Planet","Ein Stern","Ein Mond","Ein Komet"],"Ein Planet"],
+["Welches Organ pumpt Blut?",["Herz","Lunge","Magen","Gehirn"],"Herz"],
+["Welches Organ ist für das Denken besonders wichtig?",["Gehirn","Magen","Herz","Niere"],"Gehirn"],
+["Welches Organ dient hauptsächlich zum Atmen?",["Lunge","Herz","Magen","Leber"],"Lunge"],
+["Welches Organ verdaut Nahrung?",["Magen","Herz","Gehirn","Lunge"],"Magen"],
+["Wie viele Beine hat ein Insekt?",["6","8","4","10"],"6"],
+["Wie viele Beine hat eine Spinne?",["8","6","10","4"],"8"],
+["Was brauchen Pflanzen für Fotosynthese?",["Licht","Sand","Eisen","Plastik"],"Licht"],
+["Welches Gas nehmen Pflanzen bei der Fotosynthese auf?",["Kohlendioxid","Sauerstoff","Helium","Wasserstoff"],"Kohlendioxid"],
+["Welches Gas geben Pflanzen bei der Fotosynthese ab?",["Sauerstoff","Helium","Stickstoff","Wasserstoff"],"Sauerstoff"],
+["Wie nennt man Wasser in gasförmigem Zustand?",["Wasserdampf","Eis","Schnee","Tau"],"Wasserdampf"],
+["Wie nennt man Wasser in festem Zustand?",["Eis","Dampf","Nebel","Regen"],"Eis"],
+["Bei welcher Temperatur gefriert Wasser ungefähr?",["0 °C","10 °C","50 °C","100 °C"],"0 °C"],
+["Bei welcher Temperatur kocht Wasser ungefähr auf Meereshöhe?",["100 °C","50 °C","0 °C","200 °C"],"100 °C"],
+["Welches Tier ist das größte Landtier?",["Elefant","Giraffe","Nashorn","Bär"],"Elefant"],
+["Welches Tier ist das größte bekannte Tier überhaupt?",["Blauwal","Elefant","Giraffe","Hai"],"Blauwal"],
+["Welches Tier ist ein Säugetier?",["Hund","Huhn","Eidechse","Forelle"],"Hund"],
+["Welches Tier ist ein Vogel?",["Adler","Hund","Wal","Frosch"],"Adler"],
+["Welches Tier lebt sowohl im Wasser als auch an Land?",["Frosch","Adler","Pferd","Katze"],"Frosch"],
+["Was ist Schwerkraft?",["Eine Kraft","Eine Farbe","Ein Gas","Ein Planet"],"Eine Kraft"],
+["Was misst ein Thermometer?",["Temperatur","Gewicht","Länge","Zeit"],"Temperatur"],
+["Was misst ein Lineal?",["Länge","Temperatur","Gewicht","Zeit"],"Länge"],
+["Was misst eine Waage?",["Masse/Gewicht","Temperatur","Zeit","Länge"],"Masse/Gewicht"],
+["Was ist DNA?",["Erbsubstanz","Ein Planet","Ein Mineral","Ein Gas"],"Erbsubstanz"],
+["Wo befindet sich DNA in menschlichen Zellen hauptsächlich?",["Zellkern","Magen","Lunge","Hautoberfläche"],"Zellkern"],
+["Was ist ein Atom?",["Ein Baustein der Materie","Ein Planet","Ein Organ","Ein Tier"],"Ein Baustein der Materie"],
+["Was ist Sauerstoff?",["Ein chemisches Element","Ein Planet","Ein Metall","Ein Tier"],"Ein chemisches Element"],
+["Was ist Gold?",["Ein chemisches Element","Ein Gas","Ein Tier","Eine Pflanze"],"Ein chemisches Element"],
+["Was ist Wasserstoff?",["Ein chemisches Element","Ein Planet","Ein Organ","Ein Gestein"],"Ein chemisches Element"],
+["Was ist ein Vulkan?",["Eine geologische Struktur","Ein Tier","Ein Planet","Ein Gas"],"Eine geologische Struktur"],
+["Was entsteht bei einer Verbrennung häufig?",["Wärme","Eis","Schnee","Sauerstoff"],"Wärme"],
+["Was ist Elektrizität?",["Eine Form physikalischer Energie","Ein Tier","Eine Pflanze","Ein Planet"],"Eine Form physikalischer Energie"],
+["Was ist Licht?",["Elektromagnetische Strahlung","Ein Gas","Ein Mineral","Ein Tier"],"Elektromagnetische Strahlung"],
+["Was ist Schall?",["Eine mechanische Welle","Ein Gas","Ein Planet","Ein Metall"],"Eine mechanische Welle"],
+["Wie nennt man die äußere feste Schicht der Erde?",["Erdkruste","Erdkern","Mantel","Atmosphäre"],"Erdkruste"],
+["Wie nennt man die Lufthülle der Erde?",["Atmosphäre","Hydrosphäre","Erdkern","Kruste"],"Atmosphäre"],
+["Was ist ein Ökosystem?",["Lebewesen und ihre Umwelt","Nur Tiere","Nur Pflanzen","Nur Wasser"],"Lebewesen und ihre Umwelt"],
+["Was ist ein Lebensraum?",["Der Ort, an dem ein Lebewesen lebt","Ein Planet","Ein Organ","Ein Molekül"],"Der Ort, an dem ein Lebewesen lebt"],
+["Was ist Photosynthese?",["Ein Prozess, mit dem Pflanzen Lichtenergie nutzen","Eine Krankheit","Eine Tierart","Ein Planet"],"Ein Prozess, mit dem Pflanzen Lichtenergie nutzen"],
+["Was ist ein Säugetier?",["Ein Tier, das seine Jungen mit Milch ernährt","Ein Tier mit Federn","Ein Fisch","Ein Insekt"],"Ein Tier, das seine Jungen mit Milch ernährt"],
+["Was ist ein Reptil?",["Eine Tiergruppe","Eine Pflanze","Ein Mineral","Ein Gas"],"Eine Tiergruppe"],
+["Was ist ein Mineral?",["Ein natürlich vorkommender Stoff","Ein Tier","Ein Organ","Ein Planet"],"Ein natürlich vorkommender Stoff"]
+
+];
+
+
+/* =========================
+FRAGEN ZUSAMMENFÜHREN
+========================= */
+
+const baseQuestions = {
+countries,
+english,
+general,
+science
+};
+
+
+/* =========================
+LOGIN
+========================= */
+
+function login(){
+
+const name =
+document.getElementById("nameInput").value.trim();
+
+if(!name){
+alert("Bitte gib deinen Namen ein.");
+return;
 }
 
+player=name;
 
-/* Spiel starten */
-function startGame() {
-
-    playerName =
-        document.getElementById("name").value.trim();
-
-    if (playerName === "") {
-        playerName = "Spieler";
-    }
-
-    score = 0;
-    timeLeft = 60;
-
-    document.getElementById("score").textContent = score;
-    document.getElementById("time").textContent = timeLeft;
-
-    document.getElementById("start").style.display = "none";
-    document.getElementById("result").style.display = "none";
-    document.getElementById("game").style.display = "block";
-
-    newQuestion();
-
-    timer = setInterval(function() {
-
-        timeLeft--;
-
-        document.getElementById("time").textContent =
-            timeLeft;
-
-        if (timeLeft <= 0) {
-            endGame();
-        }
-
-    }, 1000);
-}
-
-
-/* Antwort überprüfen */
-function checkAnswer() {
-
-    let answer =
-        Number(document.getElementById("answer").value);
-
-    if (answer === correctAnswer) {
-
-        score++;
-
-        document.getElementById("score").textContent =
-            score;
-
-        document.getElementById("feedback").textContent =
-            "✅ Richtig!";
-
-        newQuestion();
-
-    } else {
-
-        document.getElementById("feedback").textContent =
-            "❌ Falsch!";
-
-        document.getElementById("answer").value = "";
-
-        document.getElementById("answer").focus();
-    }
-}
-
-
-/* Enter-Taste funktioniert */
-document.getElementById("answer").addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Enter") {
-            checkAnswer();
-        }
-
-    }
+localStorage.setItem(
+"learnPlayer",
+player
 );
 
-
-/* Spiel beenden */
-function endGame() {
-
-    clearInterval(timer);
-
-    document.getElementById("game").style.display =
-        "none";
-
-    document.getElementById("result").style.display =
-        "block";
-
-    document.getElementById("finalScore").textContent =
-        score;
-
-    saveScore();
-
-    showLeaderboard();
+showHome();
 }
 
 
-/* Highscore speichern */
-function saveScore() {
+function logout(){
 
-    let scores =
-        JSON.parse(localStorage.getItem("scores")) || [];
+localStorage.removeItem("learnPlayer");
 
-    scores.push({
-        name: playerName,
-        score: score
-    });
+player=null;
 
-    scores.sort(function(a, b) {
-        return b.score - a.score;
-    });
+document.getElementById("loginScreen")
+.classList.remove("hidden");
 
-    scores = scores.slice(0, 10);
+document.getElementById("homeScreen")
+.classList.add("hidden");
 
-    localStorage.setItem(
-        "scores",
-        JSON.stringify(scores)
-    );
+document.getElementById("gameScreen")
+.classList.add("hidden");
+
+document.getElementById("addScreen")
+.classList.add("hidden");
 }
 
 
-/* Rangliste anzeigen */
-function showLeaderboard() {
+function showHome(){
 
-    let scores =
-        JSON.parse(localStorage.getItem("scores")) || [];
+clearInterval(timer);
 
-    let list =
-        document.getElementById("leaderboardList");
+document.getElementById("loginScreen")
+.classList.add("hidden");
 
-    list.innerHTML = "";
+document.getElementById("gameScreen")
+.classList.add("hidden");
 
-    if (scores.length === 0) {
+document.getElementById("addScreen")
+.classList.add("hidden");
 
-        list.innerHTML =
-            "<p>Noch keine Ergebnisse.</p>";
+document.getElementById("homeScreen")
+.classList.remove("hidden");
 
-        return;
-    }
-
-    scores.forEach(function(player, index) {
-
-        let row =
-            document.createElement("div");
-
-        row.className = "player";
-
-        row.innerHTML =
-            "<span>" +
-            (index + 1) +
-            ". " +
-            player.name +
-            "</span>" +
-            "<strong>" +
-            player.score +
-            " Punkte</strong>";
-
-        list.appendChild(row);
-
-    });
+document.getElementById("playerName")
+.textContent=player;
 }
 
 
-/* Nochmal spielen */
-function playAgain() {
+/* =========================
+EIGENE FRAGEN
+========================= */
 
-    document.getElementById("result").style.display =
-        "none";
+function getCustomQuestions(category){
 
-    document.getElementById("start").style.display =
-        "block";
+const key="customQuestions_"+category;
+
+try{
+return JSON.parse(
+localStorage.getItem(key)
+)||[];
+}
+catch{
+return [];
+}
 }
 
 
-/* Rangliste beim Laden vorbereiten */
-showLeaderboard();
+function saveCustomQuestion(){
+
+const category =
+document.getElementById("customCategory").value;
+
+const question =
+document.getElementById("customQuestion").value.trim();
+
+const a =
+document.getElementById("customA").value.trim();
+
+const b =
+document.getElementById("customB").value.trim();
+
+const c =
+document.getElementById("customC").value.trim();
+
+const d =
+document.getElementById("customD").value.trim();
+
+const correctIndex =
+Number(
+document.getElementById("customCorrect").value
+);
+
+if(!question || !a || !b || !c || !d){
+
+document.getElementById("customMessage")
+.textContent="⚠️ Bitte alle Felder ausfüllen.";
+
+return;
+}
+
+const answers=[a,b,c,d];
+
+const newQuestion=[
+question,
+answers,
+answers[correctIndex]
+];
+
+const questions =
+getCustomQuestions(category);
+
+questions.push(newQuestion);
+
+localStorage.setItem(
+"customQuestions_"+category,
+JSON.stringify(questions)
+);
+
+document.getElementById("customQuestion").value="";
+document.getElementById("customA").value="";
+document.getElementById("customB").value="";
+document.getElementById("customC").value="";
+document.getElementById("customD").value="";
+
+document.getElementById("customMessage")
+.textContent="✅ Frage gespeichert!";
+}
+
+
+function showAddQuestion(){
+
+document.getElementById("homeScreen")
+.classList.add("hidden");
+
+document.getElementById("addScreen")
+.classList.remove("hidden");
+
+document.getElementById("customMessage")
+.textContent="";
+}
+
+
+/* =========================
+SPIEL STARTEN
+========================= */
+
+function openGame(game){
+
+currentGame=game;
+
+score=0;
+combo=0;
+correct=0;
+wrong=0;
+questionIndex=0;
+
+clearInterval(timer);
+
+document.getElementById("homeScreen")
+.classList.add("hidden");
+
+document.getElementById("gameScreen")
+.classList.remove("hidden");
+
+document.getElementById("resultArea")
+.classList.add("hidden");
+
+document.getElementById("message")
+.textContent="";
+
+document.getElementById("score")
+.textContent="0";
+
+document.getElementById("combo")
+.textContent="0";
+
+document.getElementById("answerArea")
+.classList.add("hidden");
+
+document.getElementById("optionsArea")
+.innerHTML="";
+
+
+if(game==="multiplication"){
+
+document.getElementById("gameName")
+.textContent="⚡ 1×1 Speed";
+
+document.getElementById("timerArea")
+.classList.remove("hidden");
+
+startMath("multiplication");
+
+}
+
+
+else if(game==="plusminus"){
+
+document.getElementById("gameName")
+.textContent="➕ Plus & Minus";
+
+document.getElementById("timerArea")
+.classList.remove("hidden");
+
+startMath("plusminus");
+
+}
+
+
+else if(game==="challenge"){
+
+document.getElementById("gameName")
+.textContent="🎯 10er-Challenge";
+
+document.getElementById("timerArea")
+.classList.add("hidden");
+
+startChallenge();
+
+}
+
+
+else{
+
+const titles={
+countries:"🌍 Länder-Quiz",
+english:"🇬🇧 Englisch-Quiz",
+general:"🧠 Allgemeinwissen",
+science:"🔬 Wissenschaft"
+};
+
+document.getElementById("gameName")
+.textContent=titles[game];
+
+document.getElementById("timerArea")
+.classList.add("hidden");
+
+startQuiz(game);
+}
+
+}
+
+
+/* =========================
+FRAGEN MISCHEN
+========================= */
+
+function shuffle(array){
+
+const copy=[...array];
+
+for(let i=copy.length-1;i>0;i--){
+
+const j=
+Math.floor(Math.random()*(i+1));
+
+[copy[i],copy[j]]=
+[copy[j],copy[i]];
+}
+
+return copy;
+}
+
+
+/* =========================
+QUIZ
+========================= */
+
+function startQuiz(category){
+
+const own =
+getCustomQuestions(category);
+
+const all=[
+...baseQuestions[category],
+...own
+];
+
+quizQuestions=
+shuffle(all);
+
+questionIndex=0;
+
+showQuizQuestion();
+}
+
+
+function showQuizQuestion(){
+
+if(questionIndex>=quizQuestions.length){
+
+endGame();
+return;
+}
+
+const q=
+quizQuestions[questionIndex];
+
+document.getElementById("question")
+.textContent=q[0];
+
+const area=
+document.getElementById("optionsArea");
+
+area.innerHTML="";
+
+const options=
+shuffle(q[1]);
+
+options.forEach(option=>{
+
+const button=
+document.createElement("button");
+
+button.className="option";
+
+button.textContent=option;
+
+button.onclick=()=>{
+answerQuiz(option);
+};
+
+area.appendChild(button);
+
+});
+}
+
+
+function answerQuiz(answer){
+
+const q=
+quizQuestions[questionIndex];
+
+if(answer===q[2]){
+
+correct++;
+combo++;
+
+let points=1;
+
+if(combo>=5)points=2;
+if(combo>=10)points=3;
+if(combo>=20)points=5;
+
+score+=points;
+
+document.getElementById("message")
+.textContent=
+"🔥 Richtig! +"+points;
+
+}
+else{
+
+wrong++;
+combo=0;
+
+document.getElementById("message")
+.textContent=
+"❌ Richtig wäre: "+q[2];
+
+}
+
+document.getElementById("score")
+.textContent=score;
+
+document.getElementById("combo")
+.textContent=combo;
+
+questionIndex++;
+
+setTimeout(()=>{
+
+document.getElementById("message")
+.textContent="";
+
+showQuizQuestion();
+
+},650);
+}
+
+
+/* =========================
+MATHE
+========================= */
+
+function startMath(type){
+
+timeLeft=60;
+
+document.getElementById("time")
+.textContent=timeLeft;
+
+newMathQuestion(type);
+
+timer=setInterval(()=>{
+
+timeLeft--;
+
+document.getElementById("time")
+.textContent=timeLeft;
+
+if(timeLeft<=0){
+
+endGame();
+
+}
+
+},1000);
+}
+
+
+function newMathQuestion(type){
+
+let a=
+Math.floor(Math.random()*10)+1;
+
+let b=
+Math.floor(Math.random()*10)+1;
+
+document.getElementById("answerArea")
+.classList.remove("hidden");
+
+
+if(type==="multiplication"){
+
+mathAnswer=a*b;
+
+document.getElementById("question")
+.textContent=
+a+" × "+b;
+
+}
+
+else{
+
+a=
+Math.floor(Math.random()*50)+1;
+
+b=
+Math.floor(Math.random()*50)+1;
+
+if(Math.random()<.5){
+
+if(b>a){
+
+let temp=a;
+a=b;
+b=temp;
+
+}
+
+mathAnswer=a-b;
+
+document.getElementById("question")
+.textContent=
+a+" − "+b;
+
+}
+
+else{
+
+mathAnswer=a+b;
+
+document.getElementById("question")
+.textContent=
+a+" + "+b;
+
+}
+
+}
+
+document.getElementById("mathAnswer").value="";
+document.getElementById("mathAnswer").focus();
+}
+
+
+function submitMath(){
+
+const input=
+document.getElementById("mathAnswer");
+
+if(!input.value)return;
+
+const answer=
+Number(input.value);
+
+if(answer===mathAnswer){
+
+correct++;
+combo++;
+
+let points=1;
+
+if(combo>=5)points=2;
+if(combo>=10)points=3;
+if(combo>=20)points=5;
+
+score+=points;
+
+document.getElementById("message")
+.textContent="🔥 Richtig! +"+points;
+
+}
+else{
+
+wrong++;
+combo=0;
+
+document.getElementById("message")
+.textContent="❌ Falsch!";
+
+}
+
+document.getElementById("score")
+.textContent=score;
+
+document.getElementById("combo")
+.textContent=combo;
+
+if(currentGame==="challenge"){
+
+questionIndex++;
+
+if(questionIndex>=10){
+
+setTimeout(endGame,400);
+return;
+}
+
+setTimeout(startChallengeQuestion,250);
+
+}
+
+else{
+
+setTimeout(()=>{
+newMathQuestion(currentGame);
+},250);
+
+}
+}
+
+
+/* =========================
+CHALLENGE
+========================= */
+
+function startChallenge(){
+
+questionIndex=0;
+
+startChallengeQuestion();
+}
+
+
+function startChallengeQuestion(){
+
+let a=
+Math.floor(Math.random()*10)+1;
+
+let b=
+Math.floor(Math.random()*10)+1;
+
+mathAnswer=a*b;
+
+document.getElementById("answerArea")
+.classList.remove("hidden");
+
+document.getElementById("question")
+.textContent=
+(questionIndex+1)+
+" / 10    "+
+a+" × "+b;
+
+document.getElementById("mathAnswer").value="";
+
+document.getElementById("mathAnswer").focus();
+}
+
+
+/* =========================
+ENDE
+========================= */
+
+function endGame(){
+
+clearInterval(timer);
+
+document.getElementById("answerArea")
+.classList.add("hidden");
+
+document.getElementById("optionsArea")
+.innerHTML="";
+
+document.getElementById("resultArea")
+.classList.remove("hidden");
+
+document.getElementById("resultText")
+.innerHTML=
+"🎯 "+score+" Punkte<br><br>"+
+"✅ Richtig: "+correct+
+"<br>"+
+"❌ Falsch: "+wrong;
+
+const key=
+"highscore_"+currentGame;
+
+const oldScore=
+Number(localStorage.getItem(key))||0;
+
+document.getElementById("highscore")
+.textContent=
+Math.max(score,oldScore);
+
+if(score>oldScore){
+
+localStorage.setItem(key,score);
+
+document.getElementById("record")
+.textContent=
+"🏆 NEUER HIGHSCORE!";
+
+confetti();
+
+}
+else{
+
+document.getElementById("record")
+.textContent=
+"Dein Highscore: "+oldScore;
+}
+}
+
+
+/* =========================
+NEUSTART
+========================= */
+
+function restartGame(){
+
+openGame(currentGame);
+}
+
+
+/* =========================
+KONFETTI
+========================= */
+
+function confetti(){
+
+const container=
+document.getElementById("confetti");
+
+container.innerHTML="";
+
+const colors=[
+"#ff4757",
+"#ffa502",
+"#2ed573",
+"#1e90ff",
+"#a55eea",
+"#ff6b81"
+];
+
+for(let i=0;i<100;i++){
+
+const p=
+document.createElement("div");
+
+p.className="confetti";
+
+p.style.left=
+Math.random()*100+"%";
+
+p.style.background=
+colors[
+Math.floor(
+Math.random()*colors.length
+)
+];
+
+p.style.animationDelay=
+Math.random()*1.5+"s";
+
+container.appendChild(p);
+}
+
+setTimeout(()=>{
+container.innerHTML="";
+},4500);
+}
+
+
+/* =========================
+ENTER-TASTE
+========================= */
+
+document
+.getElementById("mathAnswer")
+.addEventListener(
+"keydown",
+event=>{
+
+if(event.key==="Enter"){
+submitMath();
+}
+
+});
+
+
+/* =========================
+START
+========================= */
+
+if(player){
+
+showHome();
+}
 
 </script>
 
